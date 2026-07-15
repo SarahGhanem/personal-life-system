@@ -8,11 +8,13 @@ export function DailyNoteEditor({
   weekId,
   date,
   label,
+  isToday,
   initialContent,
 }: {
   weekId: string;
   date: string;
   label: string;
+  isToday: boolean;
   initialContent: string;
 }) {
   const [content, setContent] = useState(initialContent);
@@ -33,11 +35,18 @@ export function DailyNoteEditor({
   return (
     <div>
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-sm font-semibold text-slate-900">{label}</span>
+        <span className="flex items-center gap-2 text-sm font-semibold text-ink">
+          {label}
+          {isToday && (
+            <span className="rounded-full bg-accent px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-white">
+              Today
+            </span>
+          )}
+        </span>
         {isPending ? (
-          <span className="text-xs text-slate-400">Saving...</span>
+          <span className="text-xs text-ink-faint">Saving...</span>
         ) : !saved ? (
-          <span className="text-xs text-amber-600">Unsaved</span>
+          <span className="text-xs text-career">Unsaved</span>
         ) : null}
       </div>
       <Textarea

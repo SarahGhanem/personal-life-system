@@ -1,7 +1,10 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
+import type { GoalCategory } from "@prisma/client";
+import { X } from "lucide-react";
 import { addGoalItem, toggleGoalItem, deleteGoalItem } from "@/lib/actions/goals";
+import { CATEGORY_CONFIG } from "@/lib/categories";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -9,20 +12,13 @@ import { Button } from "@/components/ui/Button";
 type Goal = { id: string; title: string; isDone: boolean };
 type GoalAction = { type: "toggle"; id: string; isDone: boolean } | { type: "remove"; id: string };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  HEALTH: "Health",
-  CAREER: "Career",
-  PERSONAL: "Personal",
-  SOCIAL: "Social",
-};
-
 export function GoalCategoryChecklist({
   weekId,
   category,
   goals,
 }: {
   weekId: string;
-  category: string;
+  category: GoalCategory;
   goals: Goal[];
 }) {
   const [isPending, startTransition] = useTransition();
@@ -33,9 +29,23 @@ export function GoalCategoryChecklist({
     return state.filter((g) => g.id !== action.id);
   });
 
+  const config = CATEGORY_CONFIG[category];
+  const Icon = config.icon;
+  const done = optimisticGoals.filter((g) => g.isDone).length;
+
   return (
     <div>
-      <h3 className="mb-2 text-sm font-semibold text-slate-900">{CATEGORY_LABELS[category]}</h3>
+      <div className="mb-2 flex items-center justify-between">
+        <h3 className={`flex items-center gap-1.5 text-sm font-semibold ${config.text}`}>
+          <Icon className="h-4 w-4" aria-hidden="true" />
+          {config.label}
+        </h3>
+        {optimisticGoals.length > 0 && (
+          <span className="text-xs tabular-nums text-ink-faint">
+            {done}/{optimisticGoals.length}
+          </span>
+        )}
+      </div>
       <ul className="mb-2 space-y-1">
         {optimisticGoals.map((goal) => (
           <li key={goal.id} className="flex items-center gap-2">
@@ -50,7 +60,7 @@ export function GoalCategoryChecklist({
                 });
               }}
             />
-            <span className={`flex-1 text-sm ${goal.isDone ? "text-slate-400 line-through" : "text-slate-800"}`}>
+            <span className={`flex-1 text-sm ${goal.isDone ? "text-ink-faint line-through" : "text-ink"}`}>
               {goal.title}
             </span>
             <button
@@ -62,9 +72,11 @@ export function GoalCategoryChecklist({
                   await deleteGoalItem(goal.id);
                 })
               }
-              className="text-xs text-slate-400 hover:text-red-600"
+              aria-label={`Remove ${goal.title}`}
+              title="Remove"
+              className="text-ink-faint transition-colors hover:text-danger"
             >
-              Remove
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </li>
         ))}
