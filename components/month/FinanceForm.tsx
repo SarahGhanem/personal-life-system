@@ -121,7 +121,7 @@ export function FinanceForm({ monthId, finance }: { monthId: string; finance: Fi
         <label className="mb-1 block text-sm font-medium text-ink-soft">Notes</label>
         <Textarea name="notes" rows={4} defaultValue={finance?.notes ?? ""} />
       </div>
-      {message && <p className="text-sm text-ink-soft">{message}</p>}
+      {message && <p className="animate-fade-in text-sm text-ink-soft">{message}</p>}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Saving..." : "Save"}
       </Button>

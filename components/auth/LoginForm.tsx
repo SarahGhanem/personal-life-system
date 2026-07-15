@@ -23,7 +23,7 @@ export function LoginForm() {
         </label>
         <Input id="password" name="password" type="password" autoComplete="current-password" required />
       </div>
-      {errorMessage && <p className="text-sm text-danger">{errorMessage}</p>}
+      {errorMessage && <p className="animate-fade-in text-sm text-danger">{errorMessage}</p>}
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Signing in..." : "Sign in"}
       </Button>

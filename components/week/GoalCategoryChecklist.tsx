@@ -52,6 +52,7 @@ export function GoalCategoryChecklist({
             <Checkbox
               checked={goal.isDone}
               disabled={isPending}
+              className={goal.isDone ? "animate-goal-pop" : ""}
               onChange={(e) => {
                 const isDone = e.target.checked;
                 startTransition(async () => {

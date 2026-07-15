@@ -15,7 +15,7 @@ export function MonthTile({
   return (
     <Link href={`/years/${year}/months/${month}`}>
       <Card
-        className={`flex items-center justify-center gap-2 text-center transition-colors hover:border-accent ${
+        className={`flex items-center justify-center gap-2 text-center transition-[color,background-color,border-color,transform] hover:-translate-y-0.5 hover:border-accent active:translate-y-0 ${
           isCurrent ? "border-accent bg-accent-soft" : ""
         }`}
       >

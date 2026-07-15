@@ -28,7 +28,7 @@ export function WeeksList({
         return (
           <Link key={startISO} href={`/years/${year}/months/${month}/weeks/${startISO}`}>
             <Card
-              className={`flex items-center justify-between gap-3 transition-colors hover:border-accent ${
+              className={`flex items-center justify-between gap-3 transition-[color,background-color,border-color,transform] hover:-translate-y-0.5 hover:border-accent active:translate-y-0 ${
                 isCurrent ? "border-accent bg-accent-soft" : ""
               }`}
             >

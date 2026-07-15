@@ -6,7 +6,7 @@ import { requireUser } from "@/lib/session";
 import { getOrCreateWeek } from "@/lib/actions/weeks";
 import { getOrCreateWeeklyReflection } from "@/lib/actions/reflections";
 import { formatISODate, getTodayISO, getWeekDates, getWeeksForMonth, MONTH_NAMES, WEEKDAY_LABELS } from "@/lib/dates";
-import { CATEGORY_ORDER } from "@/lib/categories";
+import { CATEGORY_CONFIG, CATEGORY_ORDER } from "@/lib/categories";
 import { GoalCategoryChecklist } from "@/components/week/GoalCategoryChecklist";
 import { DailyNoteEditor } from "@/components/week/DailyNoteEditor";
 import { EndOfWeekQuestion } from "@/components/week/EndOfWeekQuestion";
@@ -70,7 +70,7 @@ export default async function WeekPage({
         <h2 className="mb-3 font-display text-lg font-medium text-ink">Goals for the week</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {CATEGORY_ORDER.map((category) => (
-            <Card key={category}>
+            <Card key={category} className={CATEGORY_CONFIG[category].softBg}>
               <GoalCategoryChecklist
                 weekId={week.id}
                 category={category}

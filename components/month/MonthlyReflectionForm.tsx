@@ -53,7 +53,7 @@ export function MonthlyReflectionForm({ monthId, reflection }: { monthId: string
         <FieldLabel icon={StickyNote}>Notes</FieldLabel>
         <Textarea name="notes" rows={3} defaultValue={reflection?.notes ?? ""} />
       </div>
-      {message && <p className="text-sm text-ink-soft">{message}</p>}
+      {message && <p className="animate-fade-in text-sm text-ink-soft">{message}</p>}
       <Button type="submit" disabled={isPending}>
         {isPending ? "Saving..." : "Save"}
       </Button>

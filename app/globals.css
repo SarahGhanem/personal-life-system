@@ -53,3 +53,25 @@ body {
 .shadow-soft-lg {
   box-shadow: var(--shadow-4);
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .animate-fade-in {
+    animation: var(--animation-fade-in);
+  }
+
+  @keyframes goal-pop {
+    0% {
+      transform: scale(1);
+    }
+    45% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .animate-goal-pop {
+    animation: goal-pop 0.4s var(--ease-elastic-out-3);
+  }
+}
