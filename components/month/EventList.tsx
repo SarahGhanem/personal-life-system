@@ -1,6 +1,7 @@
-import { CalendarX2, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { deleteEvent } from "@/lib/actions/events";
 import { Button } from "@/components/ui/Button";
+import { PlannerIllustration } from "@/components/illustrations/PlannerIllustration";
 
 type EventLite = { id: string; title: string; time: string | null; notes: string | null; date: Date };
 
@@ -13,10 +14,10 @@ export function EventList({
 }) {
   if (events.length === 0) {
     return (
-      <p className="flex items-center gap-2 py-3 text-sm text-ink-faint">
-        <CalendarX2 className="h-4 w-4" aria-hidden="true" />
-        {emptyMessage}
-      </p>
+      <div className="flex flex-col items-center gap-1 py-3 text-center">
+        <PlannerIllustration className="w-24 opacity-90" />
+        <p className="text-sm text-ink-faint">{emptyMessage}</p>
+      </div>
     );
   }
 

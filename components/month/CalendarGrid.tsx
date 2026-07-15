@@ -48,7 +48,7 @@ export function CalendarGrid({
             aria-pressed={isSelected}
             aria-label={`Select ${iso}${events.length ? `, ${events.length} event${events.length > 1 ? "s" : ""}` : ""}`}
             className={cn(
-              "min-h-20 p-1 text-left transition-colors hover:bg-accent-soft",
+              "min-h-20 p-1 text-left transition-[background-color,transform] hover:bg-accent-soft active:scale-[0.97]",
               !inMonth ? "bg-bg/60 text-ink-faint" : isWeekend ? "bg-bg/40" : "bg-surface",
               isToday && "ring-2 ring-inset ring-accent",
               isSelected && "bg-accent-soft ring-2 ring-inset ring-accent-strong",

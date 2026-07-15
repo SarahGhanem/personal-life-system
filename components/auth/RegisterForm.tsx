@@ -30,7 +30,7 @@ export function RegisterForm() {
           minLength={8}
         />
       </div>
-      {message && <p className="text-sm text-ink-soft">{message}</p>}
+      {message && <p className="animate-fade-in text-sm text-ink-soft">{message}</p>}
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Creating account..." : "Create account"}
       </Button>

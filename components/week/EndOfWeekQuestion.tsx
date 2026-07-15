@@ -35,7 +35,7 @@ export function EndOfWeekQuestion({
       <form action={formAction} className="space-y-2">
         <input type="hidden" name="weekId" value={weekId} />
         <Textarea name="answer" rows={3} defaultValue={initialAnswer} placeholder="Your answer..." />
-        {message && <p className="text-sm text-ink-soft">{message}</p>}
+        {message && <p className="animate-fade-in text-sm text-ink-soft">{message}</p>}
         <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save answer"}
         </Button>

@@ -17,7 +17,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "rounded-sm px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed",
+        "rounded-sm px-4 py-2 text-sm font-medium transition-[color,background-color,transform] active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100",
         variantClasses[variant],
         className,
       )}
