@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { MessageCircleQuestion } from "lucide-react";
 import { submitWeeklyReflectionAnswer } from "@/lib/actions/reflections";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
@@ -27,11 +28,14 @@ export function EndOfWeekQuestion({
 
   return (
     <div>
-      <p className="mb-2 text-sm font-medium text-slate-900">{question}</p>
+      <div className="mb-3 flex items-start gap-3 rounded-lg bg-accent-soft p-3">
+        <MessageCircleQuestion className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+        <p className="font-display text-base font-medium leading-snug text-ink">{question}</p>
+      </div>
       <form action={formAction} className="space-y-2">
         <input type="hidden" name="weekId" value={weekId} />
         <Textarea name="answer" rows={3} defaultValue={initialAnswer} placeholder="Your answer..." />
-        {message && <p className="text-sm text-slate-600">{message}</p>}
+        {message && <p className="text-sm text-ink-soft">{message}</p>}
         <Button type="submit" disabled={isPending}>
           {isPending ? "Saving..." : "Save answer"}
         </Button>

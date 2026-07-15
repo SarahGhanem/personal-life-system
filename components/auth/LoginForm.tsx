@@ -12,24 +12,24 @@ export function LoginForm() {
   return (
     <form action={formAction} className="space-y-4">
       <div>
-        <label htmlFor="username" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="username" className="mb-1 block text-sm font-medium text-ink-soft">
           Username
         </label>
         <Input id="username" name="username" autoComplete="username" required />
       </div>
       <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="password" className="mb-1 block text-sm font-medium text-ink-soft">
           Password
         </label>
         <Input id="password" name="password" type="password" autoComplete="current-password" required />
       </div>
-      {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
+      {errorMessage && <p className="text-sm text-danger">{errorMessage}</p>}
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Signing in..." : "Sign in"}
       </Button>
-      <p className="text-center text-sm text-slate-500">
+      <p className="text-center text-sm text-ink-faint">
         No account?{" "}
-        <Link href="/register" className="font-medium text-slate-900 underline">
+        <Link href="/register" className="font-medium text-accent-strong underline">
           Register
         </Link>
       </p>

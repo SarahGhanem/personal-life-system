@@ -12,13 +12,13 @@ export function RegisterForm() {
   return (
     <form action={formAction} className="space-y-4">
       <div>
-        <label htmlFor="username" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="username" className="mb-1 block text-sm font-medium text-ink-soft">
           Username
         </label>
         <Input id="username" name="username" autoComplete="username" required minLength={3} maxLength={32} />
       </div>
       <div>
-        <label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
+        <label htmlFor="password" className="mb-1 block text-sm font-medium text-ink-soft">
           Password
         </label>
         <Input
@@ -30,13 +30,13 @@ export function RegisterForm() {
           minLength={8}
         />
       </div>
-      {message && <p className="text-sm text-slate-600">{message}</p>}
+      {message && <p className="text-sm text-ink-soft">{message}</p>}
       <Button type="submit" disabled={isPending} className="w-full">
         {isPending ? "Creating account..." : "Create account"}
       </Button>
-      <p className="text-center text-sm text-slate-500">
+      <p className="text-center text-sm text-ink-faint">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-slate-900 underline">
+        <Link href="/login" className="font-medium text-accent-strong underline">
           Sign in
         </Link>
       </p>

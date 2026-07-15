@@ -4,7 +4,7 @@ export function Checkbox({ className = "", ...props }: InputHTMLAttributes<HTMLI
   return (
     <input
       type="checkbox"
-      className={`h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-slate-500 ${className}`}
+      className={`h-4 w-4 rounded border-border text-accent focus:ring-accent ${className}`}
       {...props}
     />
   );

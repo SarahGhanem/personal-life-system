@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { getOrCreateWeek } from "@/lib/actions/weeks";
 import { getOrCreateWeeklyReflection } from "@/lib/actions/reflections";
-import { formatISODate, getWeekDates, MONTH_NAMES, WEEKDAY_LABELS } from "@/lib/dates";
+import { formatISODate, getTodayISO, getWeekDates, MONTH_NAMES, WEEKDAY_LABELS } from "@/lib/dates";
+import { CATEGORY_CONFIG, CATEGORY_ORDER } from "@/lib/categories";
 import { GoalCategoryChecklist } from "@/components/week/GoalCategoryChecklist";
 import { DailyNoteEditor } from "@/components/week/DailyNoteEditor";
 import { EndOfWeekQuestion } from "@/components/week/EndOfWeekQuestion";
 import { Card } from "@/components/ui/Card";
-
-const CATEGORIES = ["HEALTH", "CAREER", "PERSONAL", "SOCIAL"] as const;
 
 export default async function WeekPage({
   params,
@@ -39,24 +39,29 @@ export default async function WeekPage({
 
   const notesByDate = new Map(notes.map((note) => [formatISODate(note.date), note.content]));
   const weekDates = getWeekDates(week.startDate);
+  const todayISO = getTodayISO();
 
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <Link href={`/years/${year}/months/${month}`} className="text-sm text-slate-500 hover:text-slate-900">
-          &larr; {MONTH_NAMES[month - 1]} {year}
+        <Link
+          href={`/years/${year}/months/${month}`}
+          className="flex items-center gap-1 text-sm text-ink-faint hover:text-accent-strong"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+          {MONTH_NAMES[month - 1]} {year}
         </Link>
-        <h1 className="text-2xl font-semibold text-slate-900">
+        <h1 className="font-display text-2xl font-semibold text-ink">
           {formatISODate(week.startDate)} &ndash; {formatISODate(week.endDate)}
         </h1>
         <span />
       </div>
 
       <section>
-        <h2 className="mb-3 text-lg font-medium text-slate-900">Goals for the week</h2>
+        <h2 className="mb-3 font-display text-lg font-medium text-ink">Goals for the week</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {CATEGORIES.map((category) => (
-            <Card key={category}>
+          {CATEGORY_ORDER.map((category) => (
+            <Card key={category} className={`border-l-4 ${CATEGORY_CONFIG[category].border}`}>
               <GoalCategoryChecklist
                 weekId={week.id}
                 category={category}
@@ -68,16 +73,18 @@ export default async function WeekPage({
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-medium text-slate-900">Daily notes</h2>
+        <h2 className="mb-3 font-display text-lg font-medium text-ink">Daily notes</h2>
         <div className="space-y-3">
           {weekDates.map((date, i) => {
             const iso = formatISODate(date);
+            const isToday = iso === todayISO;
             return (
-              <Card key={iso}>
+              <Card key={iso} className={isToday ? "border-accent" : ""}>
                 <DailyNoteEditor
                   weekId={week.id}
                   date={iso}
                   label={`${WEEKDAY_LABELS[i]} ${iso}`}
+                  isToday={isToday}
                   initialContent={notesByDate.get(iso) ?? ""}
                 />
               </Card>
@@ -87,7 +94,7 @@ export default async function WeekPage({
       </section>
 
       <section>
-        <h2 className="mb-3 text-lg font-medium text-slate-900">End of week reflection</h2>
+        <h2 className="mb-3 font-display text-lg font-medium text-ink">End of week reflection</h2>
         <Card>
           <EndOfWeekQuestion
             weekId={week.id}

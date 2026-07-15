@@ -9,6 +9,10 @@ export function parseISODate(iso: string): Date {
   return new Date(`${iso}T00:00:00.000Z`);
 }
 
+export function getTodayISO(): string {
+  return formatISODate(new Date());
+}
+
 /** Returns the Monday (UTC midnight) of the week containing `date`. */
 export function getMonday(date: Date): Date {
   const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));

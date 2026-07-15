@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { getOrCreateMonth } from "@/lib/actions/months";
@@ -26,10 +27,14 @@ export default async function MonthReflectionPage({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <Link href={`/years/${year}/months/${month}`} className="text-sm text-slate-500 hover:text-slate-900">
-          &larr; {MONTH_NAMES[month - 1]} {year}
+        <Link
+          href={`/years/${year}/months/${month}`}
+          className="flex items-center gap-1 text-sm text-ink-faint hover:text-accent-strong"
+        >
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+          {MONTH_NAMES[month - 1]} {year}
         </Link>
-        <h1 className="text-2xl font-semibold text-slate-900">Monthly Reflection</h1>
+        <h1 className="font-display text-2xl font-semibold text-ink">Monthly Reflection</h1>
         <span />
       </div>
       <Card>
