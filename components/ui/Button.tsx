@@ -1,4 +1,5 @@
 import { ButtonHTMLAttributes } from "react";
+import { cn } from "@/lib/utils";
 
 type Variant = "primary" | "secondary" | "danger";
 
@@ -15,7 +16,11 @@ export function Button({
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
   return (
     <button
-      className={`rounded-md px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed ${variantClasses[variant]} ${className}`}
+      className={cn(
+        "rounded-sm px-4 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed",
+        variantClasses[variant],
+        className,
+      )}
       {...props}
     />
   );

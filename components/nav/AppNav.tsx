@@ -26,7 +26,7 @@ export function AppNav({ username, year }: { username: string; year: number }) {
               type="submit"
               aria-label="Sign out"
               title="Sign out"
-              className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
+              className="flex items-center gap-1.5 rounded-sm px-2 py-1.5 text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
             >
               <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span className="hidden sm:inline">Sign out</span>

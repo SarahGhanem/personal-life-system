@@ -64,14 +64,14 @@ export default async function MonthPage({
           <div className="flex gap-1">
             <Link
               href={`/years/${year}/months/${month}/finance`}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
+              className="flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
             >
               <Wallet className="h-3.5 w-3.5" aria-hidden="true" />
               Finance
             </Link>
             <Link
               href={`/years/${year}/months/${month}/reflection`}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
+              className="flex items-center gap-1.5 rounded-sm px-2.5 py-1 text-sm text-ink-soft transition-colors hover:bg-accent-soft hover:text-accent-strong"
             >
               <BookHeart className="h-3.5 w-3.5" aria-hidden="true" />
               Reflection

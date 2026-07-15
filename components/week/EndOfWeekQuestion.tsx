@@ -28,9 +28,9 @@ export function EndOfWeekQuestion({
 
   return (
     <div>
-      <div className="mb-3 flex items-start gap-3 rounded-lg bg-accent-soft p-3">
-        <MessageCircleQuestion className="mt-0.5 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
-        <p className="font-display text-base font-medium leading-snug text-ink">{question}</p>
+      <div className="mb-4 flex items-start gap-3 rounded-lg bg-accent-soft px-5 py-4">
+        <MessageCircleQuestion className="mt-1 h-5 w-5 shrink-0 text-accent" aria-hidden="true" />
+        <p className="font-display text-lg font-medium italic leading-snug text-ink">{question}</p>
       </div>
       <form action={formAction} className="space-y-2">
         <input type="hidden" name="weekId" value={weekId} />

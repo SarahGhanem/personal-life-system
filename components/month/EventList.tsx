@@ -8,7 +8,7 @@ type EventLite = { id: string; title: string; time: string | null; notes: string
 export function EventList({ events }: { events: EventLite[] }) {
   if (events.length === 0) {
     return (
-      <p className="flex items-center gap-2 text-sm text-ink-faint">
+      <p className="flex items-center gap-2 py-3 text-sm text-ink-faint">
         <CalendarX2 className="h-4 w-4" aria-hidden="true" />
         No events yet this month.
       </p>
