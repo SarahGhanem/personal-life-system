@@ -1,0 +1,170 @@
+// Design notes:
+// - Every user-owned table carries a direct `userId` FK (even where reachable
+//   via a parent relation) so every query can filter directly on userId —
+//   the core mechanism guaranteeing per-user data isolation.
+// - IDs are cuid() strings, not sequential ints, to avoid ID-guessing.
+// - A Week belongs to the Month containing its startDate (Monday). Months
+//   don't divide evenly into weeks; the tail end of a month still gets
+//   DailyNotes keyed by exact date, but the week "card" itself is owned by
+//   whichever month its Monday falls in.
+// - Month/Week rows are lazily created (upsert-on-first-visit), not
+//   pre-seeded for the whole year.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  months             Month[]
+  weeks              Week[]
+  weeklyGoals        WeeklyGoal[]
+  dailyNotes         DailyNote[]
+  weeklyReflections  WeeklyReflection[]
+  monthlyFinances    MonthlyFinance[]
+  monthlyReflections MonthlyReflection[]
+  calendarEvents     CalendarEvent[]
+}
+
+model Month {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  year   Int
+  month  Int // 1-12
+
+  events     CalendarEvent[]
+  weeks      Week[]
+  finance    MonthlyFinance?
+  reflection MonthlyReflection?
+
+  @@unique([userId, year, month])
+  @@index([userId])
+}
+
+model Week {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monthId   String
+  month     Month    @relation(fields: [monthId], references: [id], onDelete: Cascade)
+  startDate DateTime @db.Date // Monday
+  endDate   DateTime @db.Date // Sunday
+
+  goals      WeeklyGoal[]
+  dailyNotes DailyNote[]
+  reflection WeeklyReflection?
+
+  @@unique([userId, startDate])
+  @@index([monthId])
+}
+
+enum GoalCategory {
+  HEALTH
+  CAREER
+  PERSONAL
+  SOCIAL
+}
+
+model WeeklyGoal {
+  id        String       @id @default(cuid())
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekId    String
+  week      Week         @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  category  GoalCategory
+  title     String
+  isDone    Boolean      @default(false)
+  sortOrder Int          @default(0)
+  createdAt DateTime     @default(now())
+
+  @@index([weekId, category])
+}
+
+// Keyed by exact calendar date so notes are never ambiguous even for boundary weeks.
+model DailyNote {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekId    String
+  week      Week     @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  date      DateTime @db.Date
+  content   String   @db.Text
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([weekId])
+}
+
+model QuestionBank {
+  id       String  @id @default(cuid())
+  text     String  @unique
+  isActive Boolean @default(true)
+
+  weeklyReflections WeeklyReflection[]
+}
+
+// One row per week per user. questionId is assigned deterministically the
+// first time the "end of week" section is opened, and never changes after.
+model WeeklyReflection {
+  id         String       @id @default(cuid())
+  userId     String
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  weekId     String       @unique
+  week       Week         @relation(fields: [weekId], references: [id], onDelete: Cascade)
+  questionId String
+  question   QuestionBank @relation(fields: [questionId], references: [id])
+  answer     String?      @db.Text
+  updatedAt  DateTime     @updatedAt
+}
+
+model MonthlyFinance {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monthId       String   @unique
+  month         Month    @relation(fields: [monthId], references: [id], onDelete: Cascade)
+  totalIncome   Decimal  @default(0) @db.Decimal(12, 2)
+  totalSavings  Decimal  @default(0) @db.Decimal(12, 2)
+  totalExpenses Decimal  @default(0) @db.Decimal(12, 2)
+  notes         String?  @db.Text
+  updatedAt     DateTime @updatedAt
+}
+
+model MonthlyReflection {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monthId       String   @unique
+  month         Month    @relation(fields: [monthId], references: [id], onDelete: Cascade)
+  emotions      String?  @db.Text
+  whatWentWell  String?  @db.Text
+  whatWentWrong String?  @db.Text
+  notes         String?  @db.Text
+  updatedAt     DateTime @updatedAt
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monthId   String
+  month     Month    @relation(fields: [monthId], references: [id], onDelete: Cascade)
+  title     String
+  date      DateTime @db.Date
+  time      String? // free-text "HH:mm", optional
+  notes     String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@index([userId, date])
+}
