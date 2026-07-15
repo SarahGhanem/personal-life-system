@@ -1,0 +1,74 @@
+Personal Life System — Requirements to Run
+===========================================
+
+SYSTEM REQUIREMENTS
+--------------------
+- Node.js 20+ (developed/tested on Node 22)
+- npm 10+
+- PostgreSQL 16 (local install, Docker, or a managed provider like Neon/Supabase)
+  - Docker (optional, for local Postgres): docker + docker compose
+
+APPLICATION DEPENDENCIES
+-------------------------
+All JS/TS dependencies are declared in package.json and installed via `npm install`.
+Key runtime dependencies:
+- next (App Router)
+- react / react-dom
+- next-auth (Auth.js v5) — login/session handling
+- bcryptjs — password hashing
+- @prisma/client + prisma — database ORM/migrations
+- zod — input validation
+- tailwindcss (v4) — styling
+
+ENVIRONMENT VARIABLES (.env)
+------------------------------
+Copy .env.example to .env and fill in:
+- DATABASE_URL     Pooled Postgres connection string (used at runtime)
+- DIRECT_URL       Unpooled Postgres connection string (used by `prisma migrate`)
+- NEXTAUTH_SECRET   Random secret for session signing. Generate with:
+                       openssl rand -base64 32
+- NEXTAUTH_URL      Base URL of the app (e.g. http://localhost:3000)
+
+SETUP STEPS
+-----------
+1. Install dependencies:
+     npm install
+
+2. Set up environment variables:
+     cp .env.example .env
+     # then fill in NEXTAUTH_SECRET (and DATABASE_URL/DIRECT_URL if not using
+     # the default local Docker/Postgres values already in .env.example)
+
+3. Start Postgres (pick one):
+   a) Docker:            docker compose up -d
+   b) Local Postgres:    ensure a Postgres 16 server is running and a database
+                          named `personal_life_system` exists, matching the
+                          credentials in DATABASE_URL/DIRECT_URL
+
+4. Run database migrations:
+     npm run db:migrate
+
+5. Seed the weekly reflection question bank:
+     npm run db:seed
+
+6. Start the app:
+     npm run dev
+   Then open http://localhost:3000 and register an account.
+
+OTHER USEFUL COMMANDS
+----------------------
+- npm run build       Production build (also type-checks and lints)
+- npm run start        Run a production build
+- npm run lint         Run ESLint
+- npm run db:studio    Open Prisma Studio to browse the database
+- npm run db:deploy    Apply migrations in production (no dev prompts)
+
+DEPLOYMENT NOTES
+-----------------
+- Designed for cloud hosting on Vercel + a managed Postgres provider
+  (e.g. Neon or Supabase). Use the provider's pooled connection string for
+  DATABASE_URL and the unpooled/direct one for DIRECT_URL.
+- Set NEXTAUTH_SECRET and NEXTAUTH_URL (your production URL) as environment
+  variables in the hosting platform.
+- Run `npm run db:deploy` (or equivalent) against the production database
+  before first deploy.
