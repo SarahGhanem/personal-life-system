@@ -79,6 +79,11 @@ export function getCalendarGridDates(year: number, month: number): Date[] {
   return dates;
 }
 
+export function formatDisplayDate(iso: string): string {
+  const date = parseISODate(iso);
+  return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+}
+
 export const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December",

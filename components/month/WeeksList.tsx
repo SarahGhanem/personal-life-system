@@ -20,7 +20,7 @@ export function WeeksList({
 
   return (
     <div className="space-y-2">
-      {weeks.map((week) => {
+      {weeks.map((week, index) => {
         const startISO = formatISODate(week.startDate);
         const isCurrent = startISO === currentWeekStartISO;
         const progress = progressByStartISO.get(startISO);
@@ -33,9 +33,7 @@ export function WeeksList({
               }`}
             >
               <div className="flex items-center gap-2.5">
-                <span className="text-sm font-medium text-ink">
-                  {startISO} &ndash; {formatISODate(week.endDate)}
-                </span>
+                <span className="text-sm font-medium text-ink">Week {index + 1}</span>
                 {isCurrent && (
                   <span className="rounded-full bg-accent px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-white">
                     This week

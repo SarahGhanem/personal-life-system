@@ -1,4 +1,7 @@
+"use client";
+
 import { formatISODate, getCalendarGridDates, getTodayISO, WEEKDAY_LABELS } from "@/lib/dates";
+import { cn } from "@/lib/utils";
 
 type EventLite = { id: string; title: string; time: string | null; date: Date };
 
@@ -6,10 +9,14 @@ export function CalendarGrid({
   year,
   month,
   eventsByDate,
+  selectedDate,
+  onSelectDate,
 }: {
   year: number;
   month: number;
   eventsByDate: Map<string, EventLite[]>;
+  selectedDate: string;
+  onSelectDate: (iso: string) => void;
 }) {
   const dates = getCalendarGridDates(year, month);
   const todayISO = getTodayISO();
@@ -30,18 +37,22 @@ export function CalendarGrid({
         const iso = formatISODate(date);
         const inMonth = date.getUTCMonth() === month - 1;
         const isToday = iso === todayISO;
+        const isSelected = iso === selectedDate;
         const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6;
         const events = eventsByDate.get(iso) ?? [];
         return (
-          <div
+          <button
             key={iso}
-            className={`min-h-20 p-1 ${
-              !inMonth
-                ? "bg-bg/60 text-ink-faint"
-                : isWeekend
-                  ? "bg-bg/40"
-                  : "bg-surface"
-            } ${isToday ? "ring-2 ring-inset ring-accent" : ""}`}
+            type="button"
+            onClick={() => onSelectDate(iso)}
+            aria-pressed={isSelected}
+            aria-label={`Select ${iso}${events.length ? `, ${events.length} event${events.length > 1 ? "s" : ""}` : ""}`}
+            className={cn(
+              "min-h-20 p-1 text-left transition-colors hover:bg-accent-soft",
+              !inMonth ? "bg-bg/60 text-ink-faint" : isWeekend ? "bg-bg/40" : "bg-surface",
+              isToday && "ring-2 ring-inset ring-accent",
+              isSelected && "bg-accent-soft ring-2 ring-inset ring-accent-strong",
+            )}
           >
             <div className="mb-1 flex justify-end">
               <span
@@ -66,7 +77,7 @@ export function CalendarGrid({
                 </div>
               ))}
             </div>
-          </div>
+          </button>
         );
       })}
     </div>
