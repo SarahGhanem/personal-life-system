@@ -48,6 +48,8 @@ If no testing tools exist, either verify manually and say so explicitly, or ask 
 
 UI Design (if this project has a UI)
 
+Use Tailwind CSS and Open Props only for styling — no other CSS frameworks, component libraries, or ad hoc CSS-in-JS.
+
 If a design system, style guide, or theme config exists in the repo (e.g. DESIGN.md, a Tailwind/theme config, a component library), read it before creating or modifying any component or page, and follow it.
 
 Don't hardcode colors, spacing, or typography if design tokens/utility classes already exist for them.
