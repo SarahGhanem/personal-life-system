@@ -63,12 +63,21 @@ OTHER USEFUL COMMANDS
 - npm run db:studio    Open Prisma Studio to browse the database
 - npm run db:deploy    Apply migrations in production (no dev prompts)
 
-DEPLOYMENT NOTES
------------------
-- Designed for cloud hosting on Vercel + a managed Postgres provider
-  (e.g. Neon or Supabase). Use the provider's pooled connection string for
-  DATABASE_URL and the unpooled/direct one for DIRECT_URL.
-- Set NEXTAUTH_SECRET and NEXTAUTH_URL (your production URL) as environment
-  variables in the hosting platform.
-- Run `npm run db:deploy` (or equivalent) against the production database
-  before first deploy.
+DEPLOYMENT NOTES (Render)
+--------------------------
+- render.yaml at the repo root defines a Blueprint: a Node web service plus
+  a managed Postgres database. In the Render dashboard, choose
+  "New > Blueprint" and point it at this repo/branch.
+- The web service's buildCommand runs `prisma generate`, `prisma migrate
+  deploy`, and `prisma db seed` before `next build`, so migrations and the
+  question bank are kept up to date on every deploy automatically.
+- DATABASE_URL/DIRECT_URL are wired to the Blueprint's Postgres database
+  automatically. NEXTAUTH_SECRET is auto-generated.
+- NEXTAUTH_URL is left blank in render.yaml (Render can't know the service's
+  URL ahead of the first deploy) — after the first deploy, set it in the
+  service's Environment tab to the public URL Render assigned
+  (e.g. https://personal-life-system.onrender.com), then redeploy.
+- General note (any host other than Render): use the provider's pooled
+  connection string for DATABASE_URL and the unpooled/direct one for
+  DIRECT_URL if the provider distinguishes between them (e.g. Neon,
+  Supabase). Render's own Postgres doesn't, so both point to the same URL.
