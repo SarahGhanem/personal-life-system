@@ -5,11 +5,8 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { getOrCreateMonth } from "@/lib/actions/months";
 import { formatISODate, getWeeksForMonth, MONTH_NAMES } from "@/lib/dates";
-import { CalendarGrid } from "@/components/month/CalendarGrid";
-import { EventForm } from "@/components/month/EventForm";
-import { EventList } from "@/components/month/EventList";
+import { MonthCalendarSection } from "@/components/month/MonthCalendarSection";
 import { WeeksList } from "@/components/month/WeeksList";
-import { Card } from "@/components/ui/Card";
 
 export default async function MonthPage({
   params,
@@ -34,12 +31,6 @@ export default async function MonthPage({
       include: { goals: { select: { isDone: true } } },
     }),
   ]);
-
-  const eventsByDate = new Map<string, typeof events>();
-  for (const event of events) {
-    const iso = formatISODate(event.date);
-    eventsByDate.set(iso, [...(eventsByDate.get(iso) ?? []), event]);
-  }
 
   const progressByStartISO = new Map(
     weekRecords.map((week) => [
@@ -85,14 +76,7 @@ export default async function MonthPage({
 
       <section>
         <h2 className="mb-2 font-display text-lg font-medium text-ink">Calendar</h2>
-        <CalendarGrid year={year} month={month} eventsByDate={eventsByDate} />
-      </section>
-
-      <section>
-        <Card className="space-y-4">
-          <EventForm monthId={monthRecord.id} />
-          <EventList events={events} />
-        </Card>
+        <MonthCalendarSection year={year} month={month} monthId={monthRecord.id} events={events} />
       </section>
 
       <section>

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { getOrCreateWeek } from "@/lib/actions/weeks";
 import { getOrCreateWeeklyReflection } from "@/lib/actions/reflections";
-import { formatISODate, getTodayISO, getWeekDates, MONTH_NAMES, WEEKDAY_LABELS } from "@/lib/dates";
+import { formatISODate, getTodayISO, getWeekDates, getWeeksForMonth, MONTH_NAMES, WEEKDAY_LABELS } from "@/lib/dates";
 import { CATEGORY_ORDER } from "@/lib/categories";
 import { GoalCategoryChecklist } from "@/components/week/GoalCategoryChecklist";
 import { DailyNoteEditor } from "@/components/week/DailyNoteEditor";
@@ -40,6 +40,10 @@ export default async function WeekPage({
   const notesByDate = new Map(notes.map((note) => [formatISODate(note.date), note.content]));
   const weekDates = getWeekDates(week.startDate);
   const todayISO = getTodayISO();
+  const weekStartISO = formatISODate(week.startDate);
+  const weekNumber = getWeeksForMonth(year, month).findIndex(
+    (w) => formatISODate(w.startDate) === weekStartISO,
+  ) + 1;
 
   return (
     <div className="space-y-8">
@@ -51,9 +55,14 @@ export default async function WeekPage({
           <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
           {MONTH_NAMES[month - 1]} {year}
         </Link>
-        <h1 className="font-display text-2xl font-semibold text-ink">
-          {formatISODate(week.startDate)} &ndash; {formatISODate(week.endDate)}
-        </h1>
+        <div className="text-center">
+          <h1 className="font-display text-2xl font-semibold text-ink">
+            {weekNumber > 0 ? `Week ${weekNumber}` : "Week"}
+          </h1>
+          <p className="text-xs text-ink-faint">
+            {formatISODate(week.startDate)} &ndash; {formatISODate(week.endDate)}
+          </p>
+        </div>
         <span />
       </div>
 
