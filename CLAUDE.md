@@ -60,6 +60,26 @@ Check responsiveness at a small and a large breakpoint when practical.
 
 Flag any deviation from the existing design system when you notice one.
 
+Feature Workflow
+
+For every new feature or significant change requested on this project, follow this pipeline end to end, in order:
+
+1. This file (CLAUDE.md) always applies — check the request against it first.
+
+2. Plan: research the relevant existing code, ask clarifying questions for anything ambiguous or that has more than one reasonable approach, and confirm the approach and file list before writing code (per Planning Mode above).
+
+3. Document: before implementing, write a short spec at `docs/features/<feature-slug>.md` (copy `docs/features/TEMPLATE.md`) — what the feature does, key decisions, and what's explicitly out of scope. One file per feature.
+
+4. Implement one feature at a time. Don't batch unrelated features into a single pass — finish and ship one before starting the next unless told otherwise.
+
+5. Test and verify: run the app, exercise the feature end to end (not just typecheck/build), run the existing test suite if one exists, and capture a screenshot as evidence before considering the feature done.
+
+6. Open a PR and merge it. This step is pre-authorized for this project — no need to ask each time a feature is ready.
+
+7. Deploy: merging to `main` is expected to trigger Render's auto-deploy on the web service. If auto-deploy isn't enabled, say so and deploy manually from the Render dashboard.
+
+If a step surfaces a blocker (a failing test, an ambiguous requirement, a merge conflict), stop at that step and resolve it before moving to the next — don't skip ahead.
+
 Conventions
 
 Follow existing code patterns in the project — don't introduce new patterns, libraries, or abstractions without discussion.
